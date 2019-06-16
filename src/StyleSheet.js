@@ -5,3 +5,7 @@ export default () => <link rel="stylesheet" href="https://stackpath.bootstrapcdn
 export const inputField = {
     width: 500
 }
+
+export const answerStyle = {
+    color: '#fc5b3f'
+}

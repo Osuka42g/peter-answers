@@ -1,5 +1,6 @@
 # Peter Answers
 
+![](name-of-giphy.gif)
 Visit the production app at [osuka42g.github.io/peter-answers](https://osuka42g.github.io/peter-answers/).
 
 ---
@@ -39,5 +40,17 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 Runs gh-pages to publish in github pages.<br>
 Homepage is defined in `package.json`, at homepage string.
+
+---
+### How it works?
+- First think about the question you are going to ask, and the __answer__<br>
+- In the next step, you will use the petition text box to write your __answer__!<br>
+- Type `.`, then start typing your __answer__, in the screen will appear a regular petition as any other!<br>
+- When finished typing you anser, press again `.` and the answer will be saver.<br>
+- Write the question at the question box and hit _Ask_.
+
+
+---
+Wanna contribute? Send a PR!
 
 👻

@@ -1,7 +1,7 @@
 import React, { useState, } from 'react'
-import StyleSheet from './StyleSheet'
+import StyleSheet, { answerStyle, } from './StyleSheet'
 import './App.css'
-import { Header, Form, Input, Button, Spinner, } from './Components/CollectionComponents'
+import { Header, Form, Input, Button, Spinner, Intro, Hint, } from './Components/CollectionComponents'
 
 const peterDefaultPetition = 'Peter please answer the following question'
 const defaultAnswers = [
@@ -73,6 +73,12 @@ function App() {
     <div className='App'>
       <StyleSheet />
       <Header>
+        <Intro>
+          Anything you can see, Peter can see. Ask Peter any prove of being here, he will answer...
+          <Hint>
+            Be polite, start petition with <strong><i>{peterDefaultPetition}</i></strong>...
+          </Hint>
+        </Intro>
         <Form>
           <Input
             disabled={isLoading}
@@ -92,7 +98,7 @@ function App() {
       </Form>
       <Spinner disabled={!isLoading} />
       <div>
-        <h4>{answerToDisplay}</h4>
+          <h4 style={answerStyle}>{answerToDisplay}</h4>
       </div>
       </Header>
     </div>
