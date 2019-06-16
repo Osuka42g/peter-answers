@@ -1,5 +1,5 @@
-import React, { useState, useEffect, } from 'react'
-import StyleSheet from './StyleSheet'
+import React, { useState, } from 'react'
+import StyleSheet, { inputField, } from './StyleSheet'
 import './App.css'
 
 const peterDefaultPetition = 'Peter please answer the following question'
@@ -8,16 +8,19 @@ const defaultAnswers = [
   'I won\'t answer...',
   'Who cares?',
   'You are becoming annoying..',
+  'If you don\'t ask properly, I will never answer',
 ]
 
 function App() {
 
   const [petition, setPetition,] = useState('')
-  const [question, setQuestion,] = useState('')
   const [answer, setAnswer,] = useState('')
   const [isTrickMode, setIsTrickMode] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [answerToDisplay, setAnswerToDisplay] = useState('')
 
-  const getPeterPetitionCharAt = n => peterDefaultPetition[n] || ''
+
+  const getPetitionCharAt = n => peterDefaultPetition[n] || ' '
 
   const changedPetition = e => {
     const { target: { value } } = e
@@ -25,22 +28,40 @@ function App() {
     const lastInsertedChar = value[characterPosition]
     const insertedDot = '.' === lastInsertedChar
 
-    console.log(e)
-    console.log(e.target)
-    console.log(e.target.value)
     if (insertedDot) {
       setIsTrickMode(!isTrickMode)
     }
 
     if (insertedDot || isTrickMode) {
-      const charReplacement = getPeterPetitionCharAt(characterPosition)
-      return setPetition(petition + charReplacement)
-    } else {
-      return setPetition(value)
-    }
-  }
-  const changedQuestion = (event, second) => {
+      const charReplacement = getPetitionCharAt(characterPosition)
 
+      const petitionToDisplay = petition + charReplacement
+      if (!insertedDot) {
+        const hiddenAnswer = answer + lastInsertedChar
+        setAnswer(hiddenAnswer)
+      }
+
+      setPetition(petitionToDisplay)
+      return
+    }
+
+    return setPetition(value)
+  }
+
+  const processQuestion = () => {
+    setIsLoading(true)
+    setAnswerToDisplay('')
+    let answerValue = answer
+
+    if(0 === answer.length) {
+      const rndAnswer = Math.floor(Math.random() * defaultAnswers.length)
+      answerValue = defaultAnswers[rndAnswer]
+    }
+
+    setTimeout(() => {
+      setIsLoading(false)
+      setAnswerToDisplay(answerValue)
+    }, 1500)
   }
 
   return (
@@ -52,23 +73,37 @@ function App() {
           <div className='input-group mb-3'>
             <input
               className='form-control'
+              style={inputField}
               type='text'
               value={petition}
               onChange={changedPetition}
+              disabled={isLoading}
             />
           </div>
           <div className='input-group mb-3'>
             <input
               type='text'
               className='form-control'
+              style={inputField}
+              disabled={isLoading}
             />
           </div>
-          <button type='button' className='btn btn-secondary'>Ask</button>
-
+          <button
+            type='button'
+            disabled={isLoading}
+            className='btn btn-secondary'
+            onClick={processQuestion}>
+            Ask
+          </button>
         </form>
-        <div>
-          <h4 className='.label'>Answer: {answer}</h4>
-        </div>
+
+        {isLoading && <div className='spinner-grow' role='status'>
+          <span className='sr-only'>Loading...</span>
+        </div>}
+
+        {answerToDisplay && <div>
+          <h4 className='.label'>{answerToDisplay}</h4>
+        </div>}
       </header>
     </div>
   )
