@@ -1,6 +1,6 @@
 # Peter Answers
 
-![](public/peter-answers.gif)
+![](public/peter-answers.gif)<br>
 Visit the production app at [osuka42g.github.io/peter-answers](https://osuka42g.github.io/peter-answers/).
 
 ---
