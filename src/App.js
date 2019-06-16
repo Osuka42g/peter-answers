@@ -1,6 +1,7 @@
 import React, { useState, } from 'react'
-import StyleSheet, { inputField, } from './StyleSheet'
+import StyleSheet from './StyleSheet'
 import './App.css'
+import { Header, Form, Input, Button, Spinner, } from './Components/CollectionComponents'
 
 const peterDefaultPetition = 'Peter please answer the following question'
 const defaultAnswers = [
@@ -19,8 +20,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [answerToDisplay, setAnswerToDisplay] = useState('')
 
-
   const getPetitionCharAt = n => peterDefaultPetition[n] || ' '
+  const resetAnswer = () => setAnswer('')
 
   const changedPetition = e => {
     const { target: { value } } = e
@@ -53,7 +54,7 @@ function App() {
     setAnswerToDisplay('')
     let answerValue = answer
 
-    if(0 === answer.length) {
+    if (0 === answer.length) {
       const rndAnswer = Math.floor(Math.random() * defaultAnswers.length)
       answerValue = defaultAnswers[rndAnswer]
     }
@@ -61,50 +62,35 @@ function App() {
     setTimeout(() => {
       setIsLoading(false)
       setAnswerToDisplay(answerValue)
+      resetAnswer()
     }, 1500)
   }
 
   return (
     <div className='App'>
       <StyleSheet />
-
-      <header className='App-header'>
-        <form>
-          <div className='input-group mb-3'>
-            <input
-              className='form-control'
-              style={inputField}
-              type='text'
-              value={petition}
-              onChange={changedPetition}
-              disabled={isLoading}
-            />
-          </div>
-          <div className='input-group mb-3'>
-            <input
-              type='text'
-              className='form-control'
-              style={inputField}
-              disabled={isLoading}
-            />
-          </div>
-          <button
-            type='button'
+      <Header>
+        <Form>
+          <Input
             disabled={isLoading}
-            className='btn btn-secondary'
-            onClick={processQuestion}>
-            Ask
-          </button>
-        </form>
+            onChange={changedPetition}
+            value={petition}
+          />
+          <Input
+            disabled={isLoading}
+          />
+          <Button
+            disabled={isLoading}
+            onClick={processQuestion}
+            text={'Ask'}
+          />
+      </Form>
+      <Spinner disabled={!isLoading} />
 
-        {isLoading && <div className='spinner-grow' role='status'>
-          <span className='sr-only'>Loading...</span>
-        </div>}
-
-        {answerToDisplay && <div>
-          <h4 className='.label'>{answerToDisplay}</h4>
-        </div>}
-      </header>
+      {answerToDisplay && <div>
+        <h4>{answerToDisplay}</h4>
+      </div>}
+      </Header>
     </div>
   )
 }
