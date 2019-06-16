@@ -23,41 +23,44 @@ function App() {
   const getPetitionCharAt = n => peterDefaultPetition[n] || ' '
   const resetAnswer = () => setAnswer('')
 
-  const changedPetition = e => {
+  const determineAnswer = () => {
+    if (0 === answer.length) {
+      const rndAnswer = Math.floor(Math.random() * defaultAnswers.length)
+      return defaultAnswers[rndAnswer]
+    }
+
+    return answer
+  }
+
+  const updatedPetition = e => {
     const { target: { value } } = e
     const characterPosition = value.length - 1
     const lastInsertedChar = value[characterPosition]
-    const insertedDot = '.' === lastInsertedChar
+    const didInsertedDot = '.' === lastInsertedChar
 
-    if (insertedDot) {
+    let updatedPetition = value
+
+    if (didInsertedDot) {
       setIsTrickMode(!isTrickMode)
     }
 
-    if (insertedDot || isTrickMode) {
-      const charReplacement = getPetitionCharAt(characterPosition)
+    if (didInsertedDot || isTrickMode) {
+      updatedPetition = petition + getPetitionCharAt(characterPosition)
 
-      const petitionToDisplay = petition + charReplacement
-      if (!insertedDot) {
-        const hiddenAnswer = answer + lastInsertedChar
-        setAnswer(hiddenAnswer)
-      }
-
-      setPetition(petitionToDisplay)
-      return
+      const hiddenAnswer = didInsertedDot
+        ? answer
+        : answer + lastInsertedChar
+      setAnswer(hiddenAnswer)
     }
 
-    return setPetition(value)
+    return setPetition(updatedPetition)
   }
 
   const processQuestion = () => {
     setIsLoading(true)
     setAnswerToDisplay('')
-    let answerValue = answer
 
-    if (0 === answer.length) {
-      const rndAnswer = Math.floor(Math.random() * defaultAnswers.length)
-      answerValue = defaultAnswers[rndAnswer]
-    }
+    const answerValue = determineAnswer()
 
     setTimeout(() => {
       setIsLoading(false)
@@ -73,11 +76,13 @@ function App() {
         <Form>
           <Input
             disabled={isLoading}
-            onChange={changedPetition}
+            onChange={updatedPetition}
+            title={'Petition'}
             value={petition}
           />
           <Input
             disabled={isLoading}
+            title={'Question'}
           />
           <Button
             disabled={isLoading}
@@ -86,10 +91,9 @@ function App() {
           />
       </Form>
       <Spinner disabled={!isLoading} />
-
-      {answerToDisplay && <div>
+      <div>
         <h4>{answerToDisplay}</h4>
-      </div>}
+      </div>
       </Header>
     </div>
   )
